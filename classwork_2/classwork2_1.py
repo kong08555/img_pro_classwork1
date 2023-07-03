@@ -1,18 +1,28 @@
-import numpy as np
 import cv2 as cv
+import numpy as np
 
-img_1 = np.zeros([300, 300], dtype=np.uint8)
+# อ่านภาพ
+img = cv.imread('classwork_2/circle Objects.png')
 
-center_1 = (140, 100)
-radius_1 = 30
+# แปลงสีขาวเป็นสีดำ
+#img[np.where((img != [255, 255, 255]).all(axis=2))] = [0, 0, 0]
 
-center_2 = (180, 100)
-radius_2 = 30
+gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-cv.circle(img_1, center_1, radius_1, 200, -1)
-cv.circle(img_1,center_2,radius_2,200,-1)
+blurred = cv.medianBlur(gray, 25) 
 
-cv.imwrite('classwork_2/circle.jpg', img_1)
+minDist = 50
+param1 = 50
+param2 = 43  
+minRadius = 5
+maxRadius = 100 
 
+circles = cv.HoughCircles(blurred, cv.HOUGH_GRADIENT, 1, minDist, param1=param1, param2=param2, minRadius=minRadius, maxRadius=maxRadius)
+
+if circles is not None:
+    circles = np.uint16(np.around(circles))
+    for i in circles[0,:]:
+        cv.circle(img, (i[0], i[1]), i[2], (0, 255, 0), 2)
+cv.imshow('Modified Image with Circles', img)
 cv.waitKey(0)
 cv.destroyAllWindows()
