@@ -22,6 +22,8 @@ if circles is not None:
     for i in circles[0,:]:
         center = (i[0], i[1])
         cv.circle(img, center, 3, (255, 0, 0), -1)
+        
+        
 cv.imshow('Modified Image with Circles', img)
 cv.imwrite('classwork_2/center_spot_circle.png',img)
 
